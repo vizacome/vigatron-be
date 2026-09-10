@@ -12,9 +12,19 @@ const waClient = new Client({
   authStrategy: new LocalAuth(), // Saves session locally to prevent scanning every time
 });
 
-waClient.on("qr", (qr) => {
-  console.log("Scan this QR code with your phone:");
-  qrcode.generate(qr, { small: true });
+waClient.on("qr", async (qr) => {
+  //console.log("Scan this QR code with your phone:");
+  //qrcode.generate(qr, { small: true });
+
+  try {
+    const phoneNumber = "59165724891";
+
+    // 2. Request the 8-digit pairing code
+    const pairingCode = await waClient.requestPairingCode(phoneNumber);
+    console.log(`Your WhatsApp Pairing Code is: ${pairingCode}`);
+  } catch (err) {
+    console.error("Failed to generate pairing code:", err);
+  }
 });
 
 // Log when the client is authenticated and ready
